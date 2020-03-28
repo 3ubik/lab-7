@@ -33,11 +33,11 @@ public class ChatDataBase {
             ex.printStackTrace();
         }
     }
-   /* public ChatDataBase plusUser(String name, String adress){
+    public ChatDataBase plusUser(String name, String adress){
         User user = new User(name, adress);
         users.add(user);
         return this;
-    }*/
+    }
 
     public ArrayList<User> getUsers() { return users; }
 

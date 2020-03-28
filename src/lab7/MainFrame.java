@@ -149,7 +149,7 @@ public class MainFrame extends JFrame {
                 }
         });
 
-        /*
+        
         // Кнопка зарегистрировать пользователя
         JTextField name = new JTextField(10);
         JTextField adress = new JTextField(10);
@@ -185,7 +185,7 @@ public class MainFrame extends JFrame {
             }
         });
         if(!name.getText().isEmpty() && !adress.getText().isEmpty())
-            listoOfUsers = listoOfUsers.plusUser(name.getText(),adress.getText());*/
+            listoOfUsers = listoOfUsers.plusUser(name.getText(),adress.getText());
 
                                                                      // Кнопка поиска пользователя
         final JButton searchButton = new JButton("Поиск");
@@ -277,7 +277,7 @@ public class MainFrame extends JFrame {
                         .addComponent(scrollPaneOutgoing)
                 .addGroup(layout2
                         .createSequentialGroup()
-                      //  .addComponent(plusUser)
+                        .addComponent(plusUser)
                         .addGap(LARGE_GAP)
                         .addComponent(listButton)
                         .addGap(LARGE_GAP)
@@ -297,7 +297,7 @@ public class MainFrame extends JFrame {
                 .addGap(MEDIUM_GAP)
                 .addGroup(layout2
                         .createParallelGroup(Alignment.BASELINE)
-                       // .addComponent(plusUser)
+                        .addComponent(plusUser)
                         .addComponent(listButton)
                         .addComponent(searchButton)
                         .addComponent(sendButton))
