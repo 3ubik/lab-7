@@ -41,7 +41,7 @@ public class DialogFrame extends JFrame {
 	public DialogFrame(final User user, MainFrame frame){
 		
 		messenger = frame.getMessenger();
-		setTitle("Áåñåäà ñ " + user.getName());
+		setTitle("Беседа с " + user.getName());
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		
 		final Toolkit kit = Toolkit.getDefaultToolkit();
@@ -55,11 +55,11 @@ public class DialogFrame extends JFrame {
 		final JScrollPane scrollPaneOutgoing = new JScrollPane(textAreaOut);
 		
 		final JPanel messagePanel = new JPanel();
-		messagePanel.setBorder(BorderFactory.createTitledBorder("Ñîîáùåíèå"));
-		final JButton sendButton = new JButton("Îòïðàâèòü");
+		messagePanel.setBorder(BorderFactory.createTitledBorder("Сообщение"));
+		final JButton sendButton = new JButton("Отправить");
 		sendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				messenger.sendMessage(user, textAreaOut.getText(), PrivateDialogFrame.this);
+				messenger.sendMessage(user, textAreaOut.getText(), DialogFrame.this);
 			}
 		});
 		

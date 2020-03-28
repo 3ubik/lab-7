@@ -32,7 +32,7 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 	
-	private static final String FRAME_TITLE = "Êëèåíò ìãíîâåííûõ ñîîáùåíèé";
+	private static final String FRAME_TITLE = "Клиент мгновенных сообщений";
 	private static final int FRAME_MINIMUM_WIDTH = 500;
 	private static final int FRAME_MINIMUM_HEIGHT = 500;
 	private static final int FROM_FIELD_DEFAULT_COLUMNS = 10;
@@ -57,50 +57,50 @@ public class MainFrame extends JFrame {
 		super(FRAME_TITLE);
 		setMinimumSize(new Dimension(FRAME_MINIMUM_WIDTH, FRAME_MINIMUM_HEIGHT));
 
-		// Öåíòðèðîâàíèå îêíà
+		
 		final Toolkit kit = Toolkit.getDefaultToolkit();
 		setLocation((kit.getScreenSize().width - getWidth()) / 2, (kit.getScreenSize().height - getHeight()) / 2);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		JMenu chatMenu = new JMenu("Ìåíþ");
+		JMenu chatMenu = new JMenu("Меню");
 		menuBar.add(chatMenu);
 		
-		Action logInAction = new AbstractAction("Âõîä") {
+		Action logInAction = new AbstractAction("Вход") {
 			public void actionPerformed(ActionEvent arg0) {
-				String value = JOptionPane.showInputDialog(MainFrame.this, "Ââåäèòå èìÿ äëÿ îáùåíèÿ", "Âõîä", JOptionPane.QUESTION_MESSAGE);
+				String value = JOptionPane.showInputDialog(MainFrame.this, "Введите имя для общения", "Вход", JOptionPane.QUESTION_MESSAGE);
 				messenger.setSender(value);
 			}
 		};
 		
-		Action findUserAction = new AbstractAction("Ïîèñê ïîëüçîâàòåëÿ") {
+		Action findUserAction = new AbstractAction("Поиск пользователя") {
 			public void actionPerformed(ActionEvent arg0) {
-				String value = JOptionPane.showInputDialog(MainFrame.this, "Ââåäèòå èìÿ äëÿ ïîèñêà", "Ïîèñê ïîëüçîâàòåëÿ", JOptionPane.QUESTION_MESSAGE);
+				String value = JOptionPane.showInputDialog(MainFrame.this, "Введите имя для поиска", "Поиск пользователя", JOptionPane.QUESTION_MESSAGE);
 				
 				User user;
 				if (messenger.getDataBase().getUser(value) == null) {
-					JOptionPane.showMessageDialog(MainFrame.this, "Ïîëüçîâàòåëÿ "+ value + " íå ñóùåñòâóåò", "Îøèáêà", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, "Пользователя "+ value + " не существует", "Ошибка", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
 					user = messenger.getDataBase().getUser(value);
-					JOptionPane.showMessageDialog(MainFrame.this, "Ïîëüçîâàòåëü íàéäåí!\n "+ user.getName() + " íàõîäèòñÿ â íàøåé áàçå äàííûõ.", "Ïîëüçîâàòåëü "+ user.getName(), JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, "Пользователь найден!\n "+ user.getName() + "находится в базе данных.", "Пользователь "+ user.getName(), JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			}
 		};
 		
-		Action openPrivateDialogAction = new AbstractAction("Ëè÷íîå ñîîáùåíèå") {
+		Action openPrivateDialogAction = new AbstractAction("Личное сообщение") {
 			public void actionPerformed(ActionEvent arg0) {
-				String value = JOptionPane.showInputDialog(MainFrame.this, "Êîìó: ", "Ïîèñê ïîëüçîâàòåëÿ", JOptionPane.QUESTION_MESSAGE);
+				String value = JOptionPane.showInputDialog(MainFrame.this, "Кому: ", "Поиск пользователя", JOptionPane.QUESTION_MESSAGE);
 				
 				User user;
 				if (messenger.getDataBase().getUser(value) == null) {
-					JOptionPane.showMessageDialog(MainFrame.this, "Ïîëüçîâàòåëÿ "+ value + " íå ñóùåñòâóåò", "Îøèáêà", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainFrame.this, "Пользователя "+ value + " Не существует", "Ошибка", JOptionPane.ERROR_MESSAGE);
 					return;
 				} else {
 					user = messenger.getDataBase().getUser(value);
 				}
-				PrivateDialogFrame dialogFrame = new PrivateDialogFrame(user, MainFrame.this);
+				DialogFrame dialogFrame = new DialogFrame(user, MainFrame.this);
 			}
 		};
 		
@@ -108,33 +108,33 @@ public class MainFrame extends JFrame {
 		chatMenu.add(findUserAction);
 		chatMenu.add(openPrivateDialogAction);
 		
-		// Òåêñòîâàÿ îáëàñòü äëÿ îòîáðàæåíèÿ ïîëó÷åííûõ ñîîáùåíèé
+		// Текстовая область для отображения полученных сообщений
 		textAreaIncoming = new JTextArea(INCOMING_AREA_DEFAULT_ROWS, 0);
 		textAreaIncoming.setEditable(false);
 		
-		// Êîíòåéíåð, îáåñïå÷èâàþùèé ïðîêðóòêó òåêñòîâîé îáëàñòè
+		// Контейнер, обеспечивающий прокрутку текстовой области
 		final JScrollPane scrollPaneIncoming = new JScrollPane(textAreaIncoming);
 		
-		// Ïîäïèñè ïîëåé
-		final JLabel labelFrom = new JLabel("Îò");
-		final JLabel labelTo = new JLabel("Ïîëó÷àòåëü");
+		// Подписи полей
+		final JLabel labelFrom = new JLabel("От");
+		final JLabel labelTo = new JLabel("Получатель");
 		
-		// Ïîëÿ ââîäà èìåíè ïîëüçîâàòåëÿ è àäðåñà ïîëó÷àòåëÿ
+		// Поля ввода имени пользователя и адреса получателя
 		textFieldFrom = new JTextField(FROM_FIELD_DEFAULT_COLUMNS);
 		textFieldTo = new JTextField(TO_FIELD_DEFAULT_COLUMNS);
 		
-		// Òåêñòîâàÿ îáëàñòü äëÿ ââîäà ñîîáùåíèÿ
+		// Текстовая область для ввода сообщения
 		textAreaOutgoing = new JTextArea(OUTGOING_AREA_DEFAULT_ROWS, 0);
 		
-		// Êîíòåéíåð, îáåñïå÷èâàþùèé ïðîêðóòêó òåêñòîâîé îáëàñòè
+		// Контейнер, обеспечивающий прокрутку текстовой области
 		final JScrollPane scrollPaneOutgoing = new JScrollPane(textAreaOutgoing);
 		
-		// Ïàíåëü ââîäà ñîîáùåíèÿ
+		// Панель ввода сообщения
 		final JPanel messagePanel = new JPanel();
-		messagePanel.setBorder(BorderFactory.createTitledBorder("Ñîîáùåíèå"));
+		messagePanel.setBorder(BorderFactory.createTitledBorder("Сообщение"));
 
-		// Êíîïêà îòïðàâêè ñîîáùåíèÿ
-		final JButton sendButton = new JButton("Îòïðàâèòü");
+		// Кнопка отправки сообщения
+		final JButton sendButton = new JButton("Отправить");
 		sendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				messenger.sendMessage(textFieldTo.getText(),
@@ -142,7 +142,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		// Êîìïîíîâêà ýëåìåíòîâ ïàíåëè "Ñîîáùåíèå"
+		// Компоновка элементов панели "Сообщение"
 		final GroupLayout layout2 = new GroupLayout(messagePanel);
 		messagePanel.setLayout(layout2);
 		layout2.setHorizontalGroup(layout2.createSequentialGroup()
@@ -167,7 +167,7 @@ public class MainFrame extends JFrame {
 					.addComponent(sendButton)
 				.addContainerGap());
 
-		// Êîìïîíîâêà ýëåìåíòîâ ôðåéìà
+			// Компоновка элементов фрейма
 		final GroupLayout layout1 = new GroupLayout(getContentPane());
 		setLayout(layout1);
 		layout1.setHorizontalGroup(layout1.createSequentialGroup()
